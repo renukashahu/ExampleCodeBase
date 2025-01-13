@@ -1,0 +1,76 @@
+package com.coding.exercise.test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import com.coding.exercise.ContentReverser;
+public class ContentReverserTest {
+
+    // Constants for input and output file names
+    private static final String inputFile = "testInput.txt";
+    private static final String outputFile = "testOutput.txt";
+
+    // Constant for a non-existent input file
+    private static final String nonExistentFile = "nonExistentFile.txt";
+
+    // Cleanup method to be executed after each test
+    @AfterEach
+    public void cleanUp() {
+        // Clean up temporary files
+        ContentReverserTestUtils.deleteFile(inputFile);
+        ContentReverserTestUtils.deleteFile(outputFile);
+    }
+
+    /**
+     * Test case to verify the reverseFileContents method with a basic input.
+     *
+     * @throws IOException If an I/O error occurs during the test.
+     */
+    @Test
+    public void testReverseFileContentsWithBasicInput() throws IOException {
+        // Execute the common test logic
+        testReverseFileContents("ABC", "CBA");
+    }
+
+    /**
+     * Test case to verify the reverseFileContents method with an empty input.
+     *
+     * @throws IOException If an I/O error occurs during the test.
+     */
+    @Test
+    public void testReverseFileContentsWithEmptyInput() throws IOException {
+        // Execute the common test logic
+        testReverseFileContents("", "");
+    }
+
+    /**
+     * Test case to verify the reverseFileContents method with newline characters.
+     *
+     * @throws IOException If an I/O error occurs during the test.
+     */
+    @Test
+    public void testReverseFileContentsWithNewlines() throws IOException {
+        // Execute the common test logic
+        testReverseFileContents("ABC 1 ABC 2 ABC 3", "3 CBA 2 CBA 1 CBA");
+    }
+
+    /**
+     * Common logic for testing reverseFileContents method with different inputs.
+     *
+     * @param input          The input string to reverse.
+     * @param expectedOutput The expected output after reversing the input.
+     * @throws IOException If an I/O error occurs during the test.
+     */
+    private void testReverseFileContents(String input, String expectedOutput) throws IOException {
+        // Arrange: Create input file with the provided content
+        ContentReverserTestUtils.createFile(inputFile, input);
+
+        // Act: Call the reverseFileContents method
+        ContentReverser.reverseFileContents(inputFile, outputFile);
+
+        // Assert: Verify the reversed content matches the expected output
+        String reversedContent = ContentReverserTestUtils.readFile(outputFile);
+        assertEquals(expectedOutput, reversedContent);
+    }
+}
